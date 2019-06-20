@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36BFABF922BA991700BDD0E8 /* SImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36BFABF622BA991000BDD0E8 /* SImagePicker.framework */; };
+		36BFABFA22BA991700BDD0E8 /* SImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 36BFABF622BA991000BDD0E8 /* SImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -18,8 +20,40 @@
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		36BFABF522BA991000BDD0E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 36BFABEF22BA991000BDD0E8 /* SImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3601B55B200C90960011CCAE;
+			remoteInfo = SImagePicker;
+		};
+		36BFABF722BA991000BDD0E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 36BFABEF22BA991000BDD0E8 /* SImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 36F155D620DD0FC4002436F4;
+			remoteInfo = SImagePickerTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		36BFABFB22BA991700BDD0E8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				36BFABFA22BA991700BDD0E8 /* SImagePicker.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		6003F58A195388D20070C39A /* SImagePickerDemo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SImagePickerDemo-iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		36BFABEF22BA991000BDD0E8 /* SImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SImagePicker.xcodeproj; path = ../SImagePicker.xcodeproj; sourceTree = "<group>"; };
+		6003F58A195388D20070C39A /* SImagePickerDemo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SImagePickerDemo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -42,6 +76,7 @@
 			files = (
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
+				36BFABF922BA991700BDD0E8 /* SImagePicker.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,9 +84,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36BFABF022BA991000BDD0E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				36BFABF622BA991000BDD0E8 /* SImagePicker.framework */,
+				36BFABF822BA991000BDD0E8 /* SImagePickerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
+				36BFABEF22BA991000BDD0E8 /* SImagePicker.xcodeproj */,
 				6003F593195388D20070C39A /* SImagePickerDemo-iOS */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
@@ -89,7 +134,7 @@
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
-			path = SImagePickerDemo-iOS;
+			path = "SImagePickerDemo-iOS";
 			sourceTree = "<group>";
 		};
 		6003F594195388D20070C39A /* Supporting Files */ = {
@@ -111,13 +156,14 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
+				36BFABFB22BA991700BDD0E8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = SImagePickerDemo-iOS;
-			productName = SImagePickerDemo-iOS;
+			name = "SImagePickerDemo-iOS";
+			productName = "SImagePickerDemo-iOS";
 			productReference = 6003F58A195388D20070C39A /* SImagePickerDemo-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -148,12 +194,35 @@
 			mainGroup = 6003F581195388D10070C39A;
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 36BFABF022BA991000BDD0E8 /* Products */;
+					ProjectRef = 36BFABEF22BA991000BDD0E8 /* SImagePicker.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6003F589195388D20070C39A /* SImagePickerDemo-iOS */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		36BFABF622BA991000BDD0E8 /* SImagePicker.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SImagePicker.framework;
+			remoteRef = 36BFABF522BA991000BDD0E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		36BFABF822BA991000BDD0E8 /* SImagePickerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SImagePickerTests.xctest;
+			remoteRef = 36BFABF722BA991000BDD0E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6003F588195388D20070C39A /* Resources */ = {
@@ -223,7 +292,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_SImagePickerDemo-iOS_VERSION = 0;
+				"CURRENT_SImagePickerDemo-iOS_VERSION" = 0;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -279,7 +348,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_SImagePickerDemo-iOS_VERSION = 0;
+				"CURRENT_SImagePickerDemo-iOS_VERSION" = 0;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -308,10 +377,14 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = SImagePickerDemo-iOS/Info.plist;
+				INFOPLIST_FILE = "SImagePickerDemo-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.szwathub.demo.SImagePickerDemo-iOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.szwathub.demo.SImagePickerDemo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5619c084-da5a-41c4-9c22-68072107344b";
 				PROVISIONING_PROFILE_SPECIFIER = "com.szwathub.demo.*";
@@ -329,10 +402,14 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = SImagePickerDemo-iOS/Info.plist;
+				INFOPLIST_FILE = "SImagePickerDemo-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.szwathub.demo.SImagePickerDemo-iOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.szwathub.demo.SImagePickerDemo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5619c084-da5a-41c4-9c22-68072107344b";
 				PROVISIONING_PROFILE_SPECIFIER = "com.szwathub.demo.*";

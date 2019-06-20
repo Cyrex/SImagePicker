@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'SImagePicker'
   s.version          = '1.0.0'
-  s.summary          = 'A short description of SImagePicker.'
+  s.summary          = 'A simple library to pick pictures.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,17 +18,23 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  A simple library to pick pictures.
                        DESC
 
   s.homepage         = 'https://github.com/Cyrex/SImagePicker'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Cyrex' => 'szwathub@gmail.com' }
   s.source           = { :git => 'https://github.com/Cyrex/SImagePicker.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.default_subspec = 'Core'
 
-  s.source_files = 'SImagePicker/**/*'
+  s.subspec 'Core' do |ss|
+    ss.dependency 'SImagePicker/Untils'
+  end
+
+  s.subspec 'Untils' do |ss|
+    ss.public_header_files = 'SImagePicker/Untils/*.h'
+    ss.ios.source_files  = 'SImagePicker/Untils/*.{h,m}'
+  end
 end

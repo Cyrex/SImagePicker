@@ -16,10 +16,13 @@
 			dependencies = (
 			);
 			name = "Cleanup Whitespace";
+			productName = "Cleanup Whitespace";
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		36BFABFF22BA99E400BDD0E8 /* SImagePickerUntils.h in Headers */ = {isa = PBXBuildFile; fileRef = 36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36BFAC0022BA99E400BDD0E8 /* SImagePickerUntils.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */; };
 		36F155D020DD0FAB002436F4 /* SImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 36F155CE20DD0FAB002436F4 /* SImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		36F155D920DD0FC5002436F4 /* SImagePickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F155D820DD0FC5002436F4 /* SImagePickerTests.m */; };
 		36F155DB20DD0FC5002436F4 /* SImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3601B55B200C90960011CCAE /* SImagePicker.framework */; };
@@ -37,14 +40,16 @@
 
 /* Begin PBXFileReference section */
 		3601B55B200C90960011CCAE /* SImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImagePickerUntils.h; sourceTree = "<group>"; };
+		36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerUntils.m; sourceTree = "<group>"; };
 		36F155CE20DD0FAB002436F4 /* SImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SImagePicker.h; sourceTree = "<group>"; };
 		36F155CF20DD0FAB002436F4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36F155D620DD0FC4002436F4 /* SImagePickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SImagePickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F155D820DD0FC5002436F4 /* SImagePickerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerTests.m; sourceTree = "<group>"; };
 		36F155DA20DD0FC5002436F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3C0B786ED3569CF0CEEC292C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		89488DB46E3A4908ED4D3352 /* SImagePicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; path = SImagePicker.podspec; sourceTree = "<group>"; };
-		FCA46364233F7861C8AF61BD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		3C0B786ED3569CF0CEEC292C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89488DB46E3A4908ED4D3352 /* SImagePicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = SImagePicker.podspec; sourceTree = "<group>"; };
+		FCA46364233F7861C8AF61BD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,10 +100,20 @@
 			name = SImagePickerMetadata;
 			sourceTree = "<group>";
 		};
+		36BFABFC22BA99BA00BDD0E8 /* Untils */ = {
+			isa = PBXGroup;
+			children = (
+				36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */,
+				36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */,
+			);
+			path = Untils;
+			sourceTree = "<group>";
+		};
 		36F155CD20DD0FAB002436F4 /* SImagePicker */ = {
 			isa = PBXGroup;
 			children = (
 				36F155CE20DD0FAB002436F4 /* SImagePicker.h */,
+				36BFABFC22BA99BA00BDD0E8 /* Untils */,
 				36F155CF20DD0FAB002436F4 /* Info.plist */,
 			);
 			path = SImagePicker;
@@ -121,6 +136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36F155D020DD0FAB002436F4 /* SImagePicker.h in Headers */,
+				36BFABFF22BA99E400BDD0E8 /* SImagePickerUntils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +198,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3601B555200C90960011CCAE /* Build configuration list for PBXProject "PROJECT" */;
+			buildConfigurationList = 3601B555200C90960011CCAE /* Build configuration list for PBXProject "SImagePicker" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -245,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36BFAC0022BA99E400BDD0E8 /* SImagePickerUntils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +418,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/SImagePicker/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -410,6 +428,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_UIKITFORMAC = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -426,6 +445,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/SImagePicker/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -435,6 +455,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTS_UIKITFORMAC = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -492,7 +513,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3601B555200C90960011CCAE /* Build configuration list for PBXProject "PROJECT" */ = {
+		3601B555200C90960011CCAE /* Build configuration list for PBXProject "SImagePicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3601B56D200C90960011CCAE /* Debug */,
