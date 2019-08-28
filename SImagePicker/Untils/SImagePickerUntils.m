@@ -104,12 +104,16 @@
 #pragma mark - Image
 @implementation SImagePickerUntils (Image)
 #pragma mark - Class Methods
-+ (void)requestThumbnailForAsset:(PHAsset *)asset quality:(BOOL)quality handler:(void (^)(UIImage *))handler {
-    CGSize size = quality ? CGSizeMake(200.f, 200.f) : CGSizeMake(40.f, 40.f);
++ (void)requestThumbnailForAsset:(PHAsset *)asset isHighQuality:(BOOL)isHighQuality handler:(void (^)(UIImage *))handler {
+    CGSize size = isHighQuality ? CGSizeMake(200.f, 200.f) : CGSizeMake(40.f, 40.f);
 
     PHImageContentMode contentMode = PHImageContentModeAspectFill;
     PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-    requestOptions.resizeMode = PHImageRequestOptionsResizeModeFast;
+    if (isHighQuality) {
+        requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    } else {
+        requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+    }
     requestOptions.networkAccessAllowed = YES;
     requestOptions.synchronous = YES;
 

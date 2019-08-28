@@ -19,8 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SImagePickerUntils : NSObject
 
 + (void)requestAuthorization:(void(^ __nullable)(PHAuthorizationStatus status))handler;
+
 + (NSArray<PHAssetCollection *> *)fetchAllCollection;
+
 + (NSArray<PHAsset *> *)fetchAllAsset;
+
 + (NSArray<PHAsset *>*)fetchAssetForCollection:(PHAssetCollection *)collection;
 
 @end
@@ -31,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SImagePickerUntils (Image)
 
 + (void)requestThumbnailForAsset:(PHAsset *)asset
-                         quality:(BOOL)quality
+                   isHighQuality:(BOOL)isHighQuality
                          handler:(void (^)(UIImage *__nullable thumbnail))handler;
 
 + (void)requestImageForAsset:(PHAsset *)asset
