@@ -17,9 +17,9 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-  A simple library to pick pictures.
-                       DESC
+#  s.description      = <<-DESC
+#  A simple library to pick pictures.
+#                       DESC
 
   s.homepage         = 'https://github.com/Cyrex/SImagePicker'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -27,11 +27,11 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Cyrex/SImagePicker.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
-  s.default_subspec = 'Core'
+#  s.default_subspec = 'Core'
 
-  s.subspec 'Core' do |ss|
-    ss.dependency 'SImagePicker/Untils'
-  end
+# s.subspec 'Core' do |ss|
+#ss.dependency 'SImagePicker/Untils'
+#  end
 
   s.subspec 'Untils' do |ss|
     ss.public_header_files = 'SImagePicker/Untils/*.h'

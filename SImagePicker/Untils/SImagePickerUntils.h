@@ -55,14 +55,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark -
 #pragma mark - LivePhoto
-API_AVAILABLE_BEGIN(ios(9.1))
 @interface SImagePickerUntils (LivePhoto)
 
 + (void)requestLivePhotoForAsset:(PHAsset *)asset
                             size:(CGSize)size
-                         handler:(void (^)(PHLivePhoto *__nullable livePhoto))handler;
+                         handler:(void (^)(PHLivePhoto *__nullable livePhoto))handler API_AVAILABLE(ios(9.1));;
 
 @end
-API_AVAILABLE_END
 
 NS_ASSUME_NONNULL_END
