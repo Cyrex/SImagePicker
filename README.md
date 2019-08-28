@@ -10,9 +10,6 @@
     <a href="http://cocoapods.org/pods/SImagePicker">
         <img src="https://img.shields.io/cocoapods/v/SImagePicker.svg?style=flat" alt="CocoaPods Version">
     </a>
-    <a href="https://houndci.com">
-        <img src="https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg" alt="Hound">
-    </a>
     <a href="https://github.com/Cyrex/SImagePicker">
         <img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage Compatible">
     </a>

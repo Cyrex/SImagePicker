@@ -7,6 +7,7 @@
 ///
 
 #import "SViewController.h"
+#import <SImagePicker/SImagePickerUntils.h>
 
 @interface SViewController ()
 
@@ -16,6 +17,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	/// Do any additional setup after loading the view, typically from a nib.
+//    [SImagePickerUntils requestAuthorization:^(PHAuthorizationStatus status) {
+//        ;
+//    }];
+    PHAsset *as = [SImagePickerUntils fetchAllAsset].firstObject;
+    [SImagePickerUntils requestVideoForAsset:as handler:^(NSURL * _Nonnull avURL, CGFloat duration) {
+        ;
+    }];;
 }
 
 @end
