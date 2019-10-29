@@ -1,40 +1,51 @@
 //
 //  Copyright © 2019 ZhiweiSun. All rights reserved.
 //
-//  File name: SImagePickerUntils.m
+//  File name: SImagePickerHelper.m
 //  Author:    Zhiwei Sun @Cyrex
 //  E-mail:    szwathub@gmail.com
 //
-//  Description:
-//
-//  History:
-//      2019/6/20: Created by Cyrex on 2019/6/20
-//
 
-#import "SImagePickerUntils.h"
+#import "SImagePickerHelper.h"
 
-@implementation SImagePickerUntils
+@interface SImagePickerHelper ()
+
+@property (nonatomic, strong) PHCachingImageManager *cacheManager;
+
+@end
+
+@implementation SImagePickerHelper
+#pragma mark - Singleton
++ (SImagePickerHelper *)sharedHelper {
+    static SImagePickerHelper *__sharedHelper;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      __sharedHelper = [[self alloc] init];
+    });
+
+    return __sharedHelper;
+}
+
 #pragma mark - Class Methods
-+ (void)requestAuthorization:(void(^)(PHAuthorizationStatus status))handler {
+- (void)requestAuthorization:(SAuthorizationCompletion)completion {
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
 
     if (PHAuthorizationStatusNotDetermined == status) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)),
-                           dispatch_get_main_queue(), ^{
-                if (handler) {
-                    handler(status);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(status);
                 }
             });
         }];
     } else {
-        if (handler) {
-            handler(status);
+        if (completion) {
+            completion(status);
         }
     }
 }
 
-+ (NSArray <PHAssetCollection *> *)fetchAllCollection {
+- (NSArray <PHAssetCollection *> *)fetchAllCollection {
     NSMutableArray<PHAssetCollection *> *collectionList = [NSMutableArray array];
     PHFetchResult *smartAlbums = nil;
 
@@ -63,7 +74,7 @@
     return collectionList;
 }
 
-+ (NSArray <PHAsset *> *)fetchAllAsset {
+- (NSArray <PHAsset *> *)fetchAllAsset {
     NSMutableArray<PHAsset *> *AllAssets = [NSMutableArray array];
 
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
@@ -79,7 +90,7 @@
     return AllAssets;
 }
 
-+ (NSArray <PHAsset *>*)fetchAssetForCollection:(PHAssetCollection *)collection {
+- (NSArray <PHAsset *>*)fetchAssetForCollection:(PHAssetCollection *)collection {
     NSMutableArray <PHAsset *> *albumAssets = [NSMutableArray array];
 
     if ([collection isKindOfClass:[PHAssetCollection class]]) {
@@ -97,17 +108,24 @@
     return albumAssets;
 }
 
+
+#pragma mark - Getters
+- (PHCachingImageManager *)cacheManager {
+    if (!_cacheManager) {
+        _cacheManager = [[PHCachingImageManager alloc] init];
+    }
+
+    return _cacheManager;
+}
+
 @end
 
 
 #pragma mark -
 #pragma mark - Image
-@implementation SImagePickerUntils (Image)
+@implementation SImagePickerHelper (Image)
 #pragma mark - Class Methods
-+ (void)requestThumbnailForAsset:(PHAsset *)asset isHighQuality:(BOOL)isHighQuality handler:(void (^)(UIImage *))handler {
-    CGSize size = isHighQuality ? CGSizeMake(200.f, 200.f) : CGSizeMake(40.f, 40.f);
-
-    PHImageContentMode contentMode = PHImageContentModeAspectFill;
+- (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion {
     PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
     if (isHighQuality) {
         requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
@@ -118,17 +136,17 @@
     requestOptions.synchronous = YES;
 
     [[PHImageManager defaultManager] requestImageForAsset:asset
-                                               targetSize:size
-                                              contentMode:contentMode
+                                               targetSize:targetSize
+                                              contentMode:PHImageContentModeAspectFill
                                                   options:requestOptions
                                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                                if (handler) {
-                                                    handler(result);
+                                                if (completion) {
+                                                    completion(result);
                                                 }
                                             }];
 }
 
-+ (void)requestImageForAsset:(PHAsset *)asset handler:(void (^)(UIImage *))handler {
+- (void)requestImageForAsset:(PHAsset *)asset completion:(SImageRequestCompletion)completion {
     CGSize size;
     switch ((NSInteger)[UIScreen mainScreen].bounds.size.width) {
         case 320:
@@ -142,19 +160,18 @@
             size =  CGSizeMake(768.f, 1024.f);
     }
 
-    PHImageContentMode contentMode = PHImageContentModeAspectFit;
     PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-    [requestOptions setResizeMode:PHImageRequestOptionsResizeModeExact];
-    [requestOptions setNetworkAccessAllowed:YES];
-    [requestOptions setSynchronous:YES];
+    requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+    requestOptions.networkAccessAllowed = YES;
+    requestOptions.synchronous = YES;
 
     [[PHImageManager defaultManager] requestImageForAsset:asset
                                                targetSize:size
-                                              contentMode:contentMode
+                                              contentMode:PHImageContentModeAspectFill
                                                   options:requestOptions
                                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                                if (handler) {
-                                                    handler(result);
+                                                if (completion) {
+                                                    completion(result);
                                                 }
                                             }];
 }
@@ -165,9 +182,9 @@
 
 #pragma mark -
 #pragma mark - Video
-@implementation SImagePickerUntils (Video)
+@implementation SImagePickerHelper (Video)
 #pragma mark - Class Methods
-+ (void)requestVideoForAsset:(PHAsset *)asset handler:(void (^)(NSURL *, CGFloat))handler {
+- (void)requestVideoForAsset:(PHAsset *)asset completion:(SVideoRequestCompletion)completion {
     PHVideoRequestOptions *requestOptions = [[PHVideoRequestOptions alloc] init];
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.version = PHVideoRequestOptionsVersionOriginal;
@@ -175,14 +192,14 @@
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset
                                                     options:requestOptions
                                               resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                  if (handler) {
+                                                  if (completion) {
                                                       if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
                                                           AVURLAsset *avAsset = (AVURLAsset *)asset;
                                                           CMTime time = avAsset.duration;
                                                           CGFloat duration = time.value / time.timescale;
-                                                          handler(avAsset.URL, duration);
+                                                          completion(avAsset.URL, duration);
                                                       } else {
-                                                          handler(nil, 0.f);
+                                                          completion(nil, 0.f);
                                                       }
                                                   }
                                               }];
@@ -193,22 +210,39 @@
 
 #pragma mark -
 #pragma mark - LivePhoto
-@implementation SImagePickerUntils (LivePhoto)
+@implementation SImagePickerHelper (LivePhoto)
 #pragma mark - Class Methods
-+ (void)requestLivePhotoForAsset:(PHAsset *)asset size:(CGSize)size handler:(void (^)(PHLivePhoto *))handler {
+- (void)requestLivePhotoForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(SLivePhotoRequestCompletion)completion {
     PHLivePhotoRequestOptions *requestOptions = [[PHLivePhotoRequestOptions alloc] init];
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.networkAccessAllowed = YES;
 
     [[PHImageManager defaultManager] requestLivePhotoForAsset:asset
-                                                   targetSize:size
+                                                   targetSize:targetSize
                                                   contentMode:PHImageContentModeAspectFit
                                                       options:requestOptions
                                                 resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
-                                                    if (handler) {
-                                                        handler(livePhoto);
+                                                    if (completion) {
+                                                        completion(livePhoto);
                                                     }
                                                 }];
+}
+
+@end
+
+#pragma mark -
+#pragma mark - Caching
+@implementation SImagePickerHelper (Caching)
+- (void)startCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
+    [self.cacheManager startCachingImagesForAssets:assets targetSize:targetSize contentMode:PHImageContentModeAspectFill options:nil];
+}
+
+- (void)stopCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
+    [self.cacheManager startCachingImagesForAssets:assets targetSize:targetSize contentMode:PHImageContentModeAspectFill options:nil];
+}
+
+- (void)stopCachingImagesForAllAssets {
+    [self.cacheManager stopCachingImagesForAllAssets];
 }
 
 @end

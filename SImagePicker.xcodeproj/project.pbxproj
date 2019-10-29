@@ -21,9 +21,14 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		36BFABFF22BA99E400BDD0E8 /* SImagePickerUntils.h in Headers */ = {isa = PBXBuildFile; fileRef = 36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		36BFAC0022BA99E400BDD0E8 /* SImagePickerUntils.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */; };
-		36F155D020DD0FAB002436F4 /* SImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 36F155CE20DD0FAB002436F4 /* SImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		361BB4CF23250C81002E71CA /* SImagePickerStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 361BB4CD23250C81002E71CA /* SImagePickerStyle.m */; };
+		361BB4D023250C81002E71CA /* SImagePickerStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 361BB4CE23250C81002E71CA /* SImagePickerStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36441EC022BB700200499DA7 /* SImageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 36441EBE22BB700200499DA7 /* SImageViewController.h */; };
+		36441EC122BB700200499DA7 /* SImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36441EBF22BB700200499DA7 /* SImageViewController.m */; };
+		36441EC522BB710B00499DA7 /* SImagePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 36441EC322BB710B00499DA7 /* SImagePicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36441EC622BB710B00499DA7 /* SImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 36441EC422BB710B00499DA7 /* SImagePicker.m */; };
+		36BFABFF22BA99E400BDD0E8 /* SImagePickerHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36BFABFD22BA99E400BDD0E8 /* SImagePickerHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36BFAC0022BA99E400BDD0E8 /* SImagePickerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BFABFE22BA99E400BDD0E8 /* SImagePickerHelper.m */; };
 		36F155D920DD0FC5002436F4 /* SImagePickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F155D820DD0FC5002436F4 /* SImagePickerTests.m */; };
 		36F155DB20DD0FC5002436F4 /* SImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3601B55B200C90960011CCAE /* SImagePicker.framework */; };
 /* End PBXBuildFile section */
@@ -40,9 +45,15 @@
 
 /* Begin PBXFileReference section */
 		3601B55B200C90960011CCAE /* SImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImagePickerUntils.h; sourceTree = "<group>"; };
-		36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerUntils.m; sourceTree = "<group>"; };
-		36F155CE20DD0FAB002436F4 /* SImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SImagePicker.h; sourceTree = "<group>"; };
+		361BB4CD23250C81002E71CA /* SImagePickerStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SImagePickerStyle.m; sourceTree = "<group>"; };
+		361BB4CE23250C81002E71CA /* SImagePickerStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SImagePickerStyle.h; sourceTree = "<group>"; };
+		36441EBE22BB700200499DA7 /* SImageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImageViewController.h; sourceTree = "<group>"; };
+		36441EBF22BB700200499DA7 /* SImageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImageViewController.m; sourceTree = "<group>"; };
+		36441EC322BB710B00499DA7 /* SImagePicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImagePicker.h; sourceTree = "<group>"; };
+		36441EC422BB710B00499DA7 /* SImagePicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePicker.m; sourceTree = "<group>"; };
+		36744EC722BB934100FFA158 /* SImagePickerMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImagePickerMacros.h; sourceTree = "<group>"; };
+		36BFABFD22BA99E400BDD0E8 /* SImagePickerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImagePickerHelper.h; sourceTree = "<group>"; };
+		36BFABFE22BA99E400BDD0E8 /* SImagePickerHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerHelper.m; sourceTree = "<group>"; };
 		36F155CF20DD0FAB002436F4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36F155D620DD0FC4002436F4 /* SImagePickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SImagePickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F155D820DD0FC5002436F4 /* SImagePickerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerTests.m; sourceTree = "<group>"; };
@@ -90,6 +101,36 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3639217A22BB881600D08A62 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				361BB4CE23250C81002E71CA /* SImagePickerStyle.h */,
+				361BB4CD23250C81002E71CA /* SImagePickerStyle.m */,
+			);
+			path = Style;
+			sourceTree = "<group>";
+		};
+		36441EBD22BB6E3800499DA7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				36441EC322BB710B00499DA7 /* SImagePicker.h */,
+				36441EC422BB710B00499DA7 /* SImagePicker.m */,
+				36441EBE22BB700200499DA7 /* SImageViewController.h */,
+				36441EBF22BB700200499DA7 /* SImageViewController.m */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		36441EC222BB70ED00499DA7 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				36744EC722BB934100FFA158 /* SImagePickerMacros.h */,
+				36441EBD22BB6E3800499DA7 /* ViewControllers */,
+				3639217A22BB881600D08A62 /* Style */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		36B6681D200DAFCC0064CEE5 /* SImagePickerMetadata */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,8 +144,8 @@
 		36BFABFC22BA99BA00BDD0E8 /* Untils */ = {
 			isa = PBXGroup;
 			children = (
-				36BFABFD22BA99E400BDD0E8 /* SImagePickerUntils.h */,
-				36BFABFE22BA99E400BDD0E8 /* SImagePickerUntils.m */,
+				36BFABFD22BA99E400BDD0E8 /* SImagePickerHelper.h */,
+				36BFABFE22BA99E400BDD0E8 /* SImagePickerHelper.m */,
 			);
 			path = Untils;
 			sourceTree = "<group>";
@@ -112,9 +153,9 @@
 		36F155CD20DD0FAB002436F4 /* SImagePicker */ = {
 			isa = PBXGroup;
 			children = (
-				36F155CE20DD0FAB002436F4 /* SImagePicker.h */,
-				36BFABFC22BA99BA00BDD0E8 /* Untils */,
 				36F155CF20DD0FAB002436F4 /* Info.plist */,
+				36441EC222BB70ED00499DA7 /* Core */,
+				36BFABFC22BA99BA00BDD0E8 /* Untils */,
 			);
 			path = SImagePicker;
 			sourceTree = "<group>";
@@ -135,8 +176,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36F155D020DD0FAB002436F4 /* SImagePicker.h in Headers */,
-				36BFABFF22BA99E400BDD0E8 /* SImagePickerUntils.h in Headers */,
+				36441EC522BB710B00499DA7 /* SImagePicker.h in Headers */,
+				36441EC022BB700200499DA7 /* SImageViewController.h in Headers */,
+				361BB4D023250C81002E71CA /* SImagePickerStyle.h in Headers */,
+				36BFABFF22BA99E400BDD0E8 /* SImagePickerHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +304,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36BFAC0022BA99E400BDD0E8 /* SImagePickerUntils.m in Sources */,
+				36441EC122BB700200499DA7 /* SImageViewController.m in Sources */,
+				36BFAC0022BA99E400BDD0E8 /* SImagePickerHelper.m in Sources */,
+				36441EC622BB710B00499DA7 /* SImagePicker.m in Sources */,
+				361BB4CF23250C81002E71CA /* SImagePickerStyle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

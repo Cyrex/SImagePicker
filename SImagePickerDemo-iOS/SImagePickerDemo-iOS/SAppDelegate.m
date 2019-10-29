@@ -1,17 +1,25 @@
-///
-///  Copyright © 2019 zhiweisun. All rights reserved.
-///
-///  File name: SAppDelegate.m
-///  Author:    zhiweisun @Cyrex
-///  E-mail:    szwathub@gmail.com
-///
+//
+//  Copyright © 2019 zhiweisun. All rights reserved.
+//
+//  File name: SAppDelegate.m
+//  Author:    zhiweisun @Cyrex
+//  E-mail:    szwathub@gmail.com
+//
 
 #import "SAppDelegate.h"
+#import "SViewController.h"
 
 @implementation SAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     /* Override point for customization after application launch. */
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+    SViewController *rootVC = [[SViewController alloc] init];
+    self.window.rootViewController = rootVC;
+
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 

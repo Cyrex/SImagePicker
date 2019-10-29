@@ -25,6 +25,7 @@ env:
 
 script:
 - set -o pipefail
+- carthage update --platform ios
 
 - if [ $RUN_TESTS == "YES" ]; then
     xcodebuild -workspace "$WORKSPACE" -scheme "$IOS_FRAMEWORK_SCHEME" -destination "$DESTINATION" ENABLE_TESTABILITY=YES test | xcpretty;
