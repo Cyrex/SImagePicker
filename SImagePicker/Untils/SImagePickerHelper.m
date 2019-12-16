@@ -74,38 +74,34 @@
     return collectionList;
 }
 
-- (NSArray <PHAsset *> *)fetchAllAsset {
-    NSMutableArray<PHAsset *> *AllAssets = [NSMutableArray array];
-
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate"
-                                                              ascending:NO]];
-    PHFetchResult *assets = [PHAsset fetchAssetsWithOptions:options];
-    if (assets.count > 0) {
-        for (PHAsset *asset in assets) {
-            [AllAssets addObject:asset];
-        }
-    }
-
-    return AllAssets;
-}
-
-- (NSArray <PHAsset *>*)fetchAssetForCollection:(PHAssetCollection *)collection {
-    NSMutableArray <PHAsset *> *albumAssets = [NSMutableArray array];
-
-    if ([collection isKindOfClass:[PHAssetCollection class]]) {
+- (void)fetchAllAsset:(SFetchAssetResultCompletion)completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
         options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate"
                                                                   ascending:NO]];
-        PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
-        if (assets.count > 0) {
-            for (PHAsset *asset in assets) {
-                [albumAssets addObject:asset];
-            }
-        }
-    }
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:options];
 
-    return albumAssets;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(completion) {
+                completion(fetchResult);
+            }
+        });
+    });
+}
+
+- (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PHFetchOptions *options = [[PHFetchOptions alloc] init];
+        options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate"
+                                                                  ascending:NO]];
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:options];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(completion) {
+                completion(fetchResult);
+            }
+        });
+    });
 }
 
 
@@ -165,15 +161,15 @@
     requestOptions.networkAccessAllowed = YES;
     requestOptions.synchronous = YES;
 
-    [[PHImageManager defaultManager] requestImageForAsset:asset
-                                               targetSize:size
-                                              contentMode:PHImageContentModeAspectFill
-                                                  options:requestOptions
-                                            resultHandler:^(UIImage *result, NSDictionary *info) {
-                                                if (completion) {
-                                                    completion(result);
-                                                }
-                                            }];
+    [self.cacheManager requestImageForAsset:asset
+                                 targetSize:size
+                                contentMode:PHImageContentModeAspectFill
+                                    options:requestOptions
+                              resultHandler:^(UIImage *result, NSDictionary *info) {
+                                    if (completion) {
+                                        completion(result);
+                                    }
+                                }];
 }
 
 @end
@@ -189,20 +185,20 @@
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.version = PHVideoRequestOptionsVersionOriginal;
 
-    [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                    options:requestOptions
-                                              resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                  if (completion) {
-                                                      if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
-                                                          AVURLAsset *avAsset = (AVURLAsset *)asset;
-                                                          CMTime time = avAsset.duration;
-                                                          CGFloat duration = time.value / time.timescale;
-                                                          completion(avAsset.URL, duration);
-                                                      } else {
-                                                          completion(nil, 0.f);
-                                                      }
-                                                  }
-                                              }];
+    [self.cacheManager requestAVAssetForVideo:asset
+                                      options:requestOptions
+                                resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+                                    if (completion) {
+                                        if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
+                                            AVURLAsset *avAsset = (AVURLAsset *)asset;
+                                            CMTime time = avAsset.duration;
+                                            CGFloat duration = time.value / time.timescale;
+                                            completion(avAsset.URL, duration);
+                                        } else {
+                                            completion(nil, 0.f);
+                                        }
+                                    }
+                                }];
 }
 
 @end
@@ -217,15 +213,15 @@
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.networkAccessAllowed = YES;
 
-    [[PHImageManager defaultManager] requestLivePhotoForAsset:asset
-                                                   targetSize:targetSize
-                                                  contentMode:PHImageContentModeAspectFit
-                                                      options:requestOptions
-                                                resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
-                                                    if (completion) {
-                                                        completion(livePhoto);
-                                                    }
-                                                }];
+    [self.cacheManager requestLivePhotoForAsset:asset
+                                     targetSize:targetSize
+                                    contentMode:PHImageContentModeAspectFit
+                                        options:requestOptions
+                                  resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
+                                        if (completion) {
+                                            completion(livePhoto);
+                                        }
+                                    }];
 }
 
 @end
@@ -234,15 +230,25 @@
 #pragma mark - Caching
 @implementation SImagePickerHelper (Caching)
 - (void)startCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
-    [self.cacheManager startCachingImagesForAssets:assets targetSize:targetSize contentMode:PHImageContentModeAspectFill options:nil];
+    [self.cacheManager startCachingImagesForAssets:assets
+                                        targetSize:targetSize
+                                       contentMode:PHImageContentModeAspectFill
+                                           options:nil];
 }
 
 - (void)stopCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
-    [self.cacheManager startCachingImagesForAssets:assets targetSize:targetSize contentMode:PHImageContentModeAspectFill options:nil];
+    [self.cacheManager startCachingImagesForAssets:assets
+                                        targetSize:targetSize
+                                       contentMode:PHImageContentModeAspectFill
+                                           options:nil];
 }
 
 - (void)stopCachingImagesForAllAssets {
-    [self.cacheManager stopCachingImagesForAllAssets];
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+
+    if (PHAuthorizationStatusNotDetermined == status) {
+        [self.cacheManager stopCachingImagesForAllAssets];
+    }
 }
 
 @end

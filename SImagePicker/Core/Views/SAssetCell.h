@@ -1,25 +1,25 @@
 //
 //  Copyright © 2019 ZhiweiSun. All rights reserved.
 //
-//  File name: SImagePickerStyle.h
+//  File name: SAssetCell.h
 //  Author:    Zhiwei Sun @Cyrex
 //  E-mail:    szwathub@gmail.com
 //
 //  Description:
 //
 //  History:
-//      2019/6/20: Created by Cyrex on 2019/6/20
+//      2019/10/29: Created by Cyrex on 2019/10/29
 //
 
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SImagePickerStyle : NSObject
+@interface SAssetCell : UICollectionViewCell
 
-@property (class, strong, readonly) SImagePickerStyle *defaultStyle;
+@property (nonatomic, strong) UIImage *image;
 
-@property (nonatomic, strong) UIColor *backColor;
++ (NSString *)reuseIdentifier;
 
 @end
 

@@ -22,16 +22,16 @@ FOUNDATION_EXPORT const unsigned char SImagePickerVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <SImagePicker/SImagePicker.h>
 #if __has_include(<SImagePicker/SImagePicker.h>)
     #import <SImagePicker/SImagePickerHelper.h>
-    #import <SImagePicker/SImagePickerStyle.h>
+    #import <SImagePicker/SImagePickerConfiguration.h>
 #else
     #import "SImagePickerHelper.h"
-    #import "SImagePickerStyle.h"
+    #import "SImagePickerConfiguration.h"
 #endif
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SImagePickerStyle;
+@class SImagePickerConfiguration;
 @class PHAsset;
 
 @protocol SImagePickerDataSource;
@@ -45,15 +45,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<SImagePickerDelegate> delegate;
 
 + (void)showImagePickerFromController:(UIViewController<SImagePickerDataSource, SImagePickerDelegate> *)fromController
-                          configBlock:(void (^)(SImagePickerStyle *configuration))configBlock;
+                          configBlock:(SImagePickerConfiguration * (^)(void))configBlock;
 
 @end
 
 #pragma mark -
 #pragma mark - SImagePickerDataSource
 @protocol SImagePickerDataSource <NSObject>
-@optional
-//- (SImagePickerStyle *)styleForImagePicker:(SImagePicker *)imagePicker;
+@required
+//- (SImagePickerConfiguration *)configurationForImagePicker:(SImagePicker *)imagePicker;
 
 @end
 

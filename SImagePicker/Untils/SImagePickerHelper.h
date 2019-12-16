@@ -18,6 +18,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^SAuthorizationCompletion)(PHAuthorizationStatus status);
+typedef void (^SFetchAssetResultCompletion)(PHFetchResult<PHAsset *> *featchResult);
 typedef void (^SImageRequestCompletion)(UIImage *__nullable image);
 typedef void (^SVideoRequestCompletion)(NSURL *__nullable avURL, CGFloat duration);
 typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) API_AVAILABLE(ios(9.1));
@@ -30,9 +31,9 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 
 - (NSArray<PHAssetCollection *> *)fetchAllCollection;
 
-- (NSArray<PHAsset *> *)fetchAllAsset;
+- (void)fetchAllAsset:(SFetchAssetResultCompletion)completion;
 
-- (NSArray<PHAsset *>*)fetchAssetForCollection:(PHAssetCollection *)collection;
+- (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion;
 
 @end
 

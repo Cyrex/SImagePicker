@@ -7,13 +7,18 @@
 //
 
 #import "SImagePicker.h"
-#import "SImagePickerStyle.h"
 
+#import "SAssetCell.h"
+
+#import "SImagePickerConfiguration.h"
 
 @interface SImagePicker () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
+@property (nonatomic, strong) SImagePickerConfiguration *configuration;
+
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic, strong) NSArray<PHAsset *> *dataList;
 
 @end
 
@@ -22,33 +27,38 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(dismissViewController)];
+    [self configViews];
+    [self configNavigations];
+    [self renderViews];
 }
 
 
 #pragma mark - Private Methods
 - (void)configViews {
-//    [self.view addSubview:self.collectionView];
-//    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(DeviceNaviHeight, 0, 0, 0));
-//    }];
+    [self.view addSubview:self.collectionView];
+}
+
+- (void)configNavigations {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(dismissViewController)];
+}
+
+- (void)renderViews {
+    self.view.backgroundColor = self.configuration.backgroundColor;
 }
 
 
 #pragma mark - Class Methods
-+ (void)showImagePickerFromController:(UIViewController<SImagePickerDataSource, SImagePickerDelegate> *)fromController
-                          configBlock:(void (^)(SImagePickerStyle *))configBlock {
-
-    SImagePickerStyle *defaultStyle = SImagePickerStyle.defaultStyle;
-    configBlock(defaultStyle);
++ (void)showImagePickerFromController:(UIViewController<SImagePickerDataSource,SImagePickerDelegate> *)fromController
+                          configBlock:(SImagePickerConfiguration * (^)(void))configBlock {
 
     SImagePicker *imagePicker = [[SImagePicker alloc] init];
     imagePicker.dataSource    = fromController;
     imagePicker.delegate      = fromController;
-    imagePicker.view.backgroundColor = defaultStyle.backColor;
+    imagePicker.configuration = configBlock();
+
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:imagePicker];
     [fromController presentViewController:navController animated:YES completion:nil];
 }
@@ -64,6 +74,54 @@
 }
 
 
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.dataList.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    SAssetCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[SAssetCell reuseIdentifier]
+                                                                 forIndexPath:indexPath];
+
+    if (indexPath.row < self.dataList.count) {
+        PHAsset *asset = [self.dataList objectAtIndex:indexPath.row];
+        [SImagePickerHelper.sharedHelper requestThumbnailForAsset:asset targetSize:CGSizeMake(200, 200) isHighQuality:YES completion:^(UIImage *image) {
+            cell.image = image;
+        }];
+    }
+//        if (image) {
+//            [cell setImage:image];
+//        } else {
+//            [SImagePickerUntils requestThumbnailForAsset:asset isHighQuality:YES handler:^(UIImage * _Nullable thumbnail) {
+//                [cell setImage:thumbnail];
+//            }];
+////            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+////                [SImagePickerUntils requestImageForAsset:asset handler:^(UIImage * _Nullable image) {
+////                    dispatch_async(dispatch_get_main_queue(), ^{
+////                        [self.imgCache setObject:image forKey:asset];
+////                        [cell setImage:image];
+////                    });
+////                }];
+////            });
+//        }
+
+    return cell;
+}
+
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+
+}
+
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(floor((CGRectGetWidth(collectionView.bounds) - 12) / 3),
+                      floor((CGRectGetWidth(collectionView.bounds) - 12) / 3));
+}
+
+
 #pragma mark - Getters
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
@@ -74,8 +132,8 @@
         _collectionView.delegate = self;
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.alwaysBounceVertical = YES;
-//        [_collectionView registerClass:[APStoreCoinsCell class]
-//            forCellWithReuseIdentifier:[APStoreCoinsCell reuseIdentifier]];
+        [_collectionView registerClass:[SAssetCell class]
+            forCellWithReuseIdentifier:[SAssetCell reuseIdentifier]];
     }
 
     return _collectionView;
@@ -84,13 +142,21 @@
 - (UICollectionViewFlowLayout *)flowLayout {
     if (!_flowLayout) {
         _flowLayout = [[UICollectionViewFlowLayout alloc] init];
-//        _flowLayout.sectionInset = UIEdgeInsetsMake(S_Y(10), S_Y(18), S_Y(10), S_Y(18));
-//        _flowLayout.minimumLineSpacing = S_Y(12);
-//        _flowLayout.minimumInteritemSpacing = S_Y(12);
+        _flowLayout.sectionInset = UIEdgeInsetsMake(0, 3, 0, 3);
+        _flowLayout.minimumLineSpacing = 3;
+        _flowLayout.minimumInteritemSpacing = 3;
         _flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     }
 
     return _flowLayout;
+}
+
+- (NSArray<PHAsset *> *)dataList {
+    if (!_dataList) {
+        _dataList = [[SImagePickerHelper sharedHelper] fetchAllAsset];
+    }
+
+    return _dataList;
 }
 
 @end

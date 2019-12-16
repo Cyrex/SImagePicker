@@ -8,7 +8,6 @@
 
 #import "SViewController.h"
 #import <SImagePicker/SImagePicker.h>
-#import "Masonry.h"
 
 @interface SViewController () <SImagePickerDataSource, SImagePickerDelegate>
 
@@ -22,22 +21,28 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
 	/// Do any additional setup after loading the view, typically from a nib.
-    [[SImagePickerHelper sharedHelper] requestAuthorization:nil];
+    CGFloat width  = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat height = [[UIScreen mainScreen] bounds].size.height;
+
     [self.view addSubview:self.showButton];
-    [self.showButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
-        make.bottom.equalTo(self.view).offset(-60);
-        make.size.mas_equalTo(CGSizeMake(200, 60));
-    }];
+    self.showButton.frame = CGRectMake((width - 200) / 2, height - 120, 200, 60);
 }
 
 
 #pragma mark - Action Methods
 - (void)showImagePicker {
-    [SImagePicker showImagePickerFromController:self configBlock:^(SImagePickerStyle *style) {
-        style.backColor = [UIColor blueColor];
+    [SImagePicker showImagePickerFromController:self configBlock:^SImagePickerConfiguration * {
+        SImagePickerConfiguration *configuration = SImagePickerConfiguration.defaultConfiguration;
+        configuration.backgroundColor  = [UIColor whiteColor];
+        configuration.maxSelectedCount = 8;
+
+        return configuration;
     }];
 }
+
+
+#pragma mark - SImagePickerDataSource
+
 
 
 #pragma mark - SImagePickerDelegate
