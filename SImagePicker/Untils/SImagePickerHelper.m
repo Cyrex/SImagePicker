@@ -7,8 +7,14 @@
 //
 
 #import "SImagePickerHelper.h"
+#import "SImageFetchOperation.h"
+
+#import <SpriteKit/SpriteKit.h>
 
 @interface SImagePickerHelper ()
+
+@property (nonatomic, strong) NSOperationQueue *fetchQueue;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, SImageFetchOperation*> *fetchOperationDics;
 
 @property (nonatomic, strong) PHCachingImageManager *cacheManager;
 
@@ -24,6 +30,19 @@
     });
 
     return __sharedHelper;
+}
+
+
+// MARK: - Life Cycle
+- (instancetype)init {
+    if (self = [super init]) {
+        self.fetchQueue = [NSOperationQueue new];
+        self.fetchQueue.maxConcurrentOperationCount = 8;
+        self.fetchQueue.name = @"com.szwathub.imagePicker";
+        self.fetchOperationDics = [NSMutableDictionary dictionary];
+    }
+    
+    return self;
 }
 
 #pragma mark - Class Methods
@@ -109,6 +128,7 @@
 - (PHCachingImageManager *)cacheManager {
     if (!_cacheManager) {
         _cacheManager = [[PHCachingImageManager alloc] init];
+        _cacheManager.allowsCachingHighQualityImages = NO;
     }
 
     return _cacheManager;
@@ -122,24 +142,38 @@
 @implementation SImagePickerHelper (Image)
 #pragma mark - Class Methods
 - (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion {
-    PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-    if (isHighQuality) {
-        requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-    } else {
-        requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
-    }
-    requestOptions.networkAccessAllowed = YES;
-    requestOptions.synchronous = YES;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
+//        if (isHighQuality) {
+//            requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+//        } else {
+//            requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+//        }
+//        requestOptions.networkAccessAllowed = YES;
+//        requestOptions.synchronous = YES;
+//
+//        [[PHImageManager defaultManager] requestImageForAsset:asset
+//                                                   targetSize:targetSize
+//                                                  contentMode:PHImageContentModeAspectFill
+//                                                      options:requestOptions
+//                                                resultHandler:^(UIImage *result, NSDictionary *info) {
+//                                                    dispatch_async(dispatch_get_main_queue(), ^{
+//                                                        if (completion) {
+//                                                            completion(result);
+//                                                        }
+//                                                    });
+//                                                }];
+//    });
+    SImageFetchOperation *operation = [[SImageFetchOperation alloc] initWithAsset:asset cacheManager:self.cacheManager];
+    __weak typeof(self) weakSelf = self;
+    [operation requesImageWithSize:targetSize needHighQuality:isHighQuality completion:^(UIImage * _Nullable image) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf.fetchOperationDics removeObjectForKey:asset.localIdentifier];
+        completion(image);
+    }];
 
-    [[PHImageManager defaultManager] requestImageForAsset:asset
-                                               targetSize:targetSize
-                                              contentMode:PHImageContentModeAspectFill
-                                                  options:requestOptions
-                                            resultHandler:^(UIImage *result, NSDictionary *info) {
-                                                if (completion) {
-                                                    completion(result);
-                                                }
-                                            }];
+    [self.fetchQueue addOperation:operation];
+    [self.fetchOperationDics setValue:operation forKey:asset.localIdentifier];
 }
 
 - (void)requestImageForAsset:(PHAsset *)asset completion:(SImageRequestCompletion)completion {
@@ -156,20 +190,15 @@
             size =  CGSizeMake(768.f, 1024.f);
     }
 
-    PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-    requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
-    requestOptions.networkAccessAllowed = YES;
-    requestOptions.synchronous = YES;
+    [self requestThumbnailForAsset:asset targetSize:size isHighQuality:YES completion:completion];
+}
 
-    [self.cacheManager requestImageForAsset:asset
-                                 targetSize:size
-                                contentMode:PHImageContentModeAspectFill
-                                    options:requestOptions
-                              resultHandler:^(UIImage *result, NSDictionary *info) {
-                                    if (completion) {
-                                        completion(result);
-                                    }
-                                }];
+- (void)cancelFetchWithAsset:(PHAsset *)asset {
+    SImageFetchOperation *operation = [[SImagePickerHelper sharedHelper].fetchOperationDics objectForKey:asset.localIdentifier];
+    if (operation) {
+        [operation cancel];
+    }
+    [[SImagePickerHelper sharedHelper].fetchOperationDics removeObjectForKey:asset.localIdentifier];
 }
 
 @end

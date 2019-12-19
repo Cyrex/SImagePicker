@@ -35,6 +35,8 @@
 		36DF036E23A72AF5000199F2 /* UICollectionView+SImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DF036C23A72AF5000199F2 /* UICollectionView+SImagePicker.m */; };
 		36F155D920DD0FC5002436F4 /* SImagePickerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F155D820DD0FC5002436F4 /* SImagePickerTests.m */; };
 		36F155DB20DD0FC5002436F4 /* SImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3601B55B200C90960011CCAE /* SImagePicker.framework */; };
+		36F7F1DB23AB13F9009D96A1 /* SImageFetchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 36F7F1D923AB13F9009D96A1 /* SImageFetchOperation.h */; };
+		36F7F1DC23AB13F9009D96A1 /* SImageFetchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F7F1DA23AB13F9009D96A1 /* SImageFetchOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,8 @@
 		36F155D620DD0FC4002436F4 /* SImagePickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SImagePickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F155D820DD0FC5002436F4 /* SImagePickerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImagePickerTests.m; sourceTree = "<group>"; };
 		36F155DA20DD0FC5002436F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36F7F1D923AB13F9009D96A1 /* SImageFetchOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SImageFetchOperation.h; sourceTree = "<group>"; };
+		36F7F1DA23AB13F9009D96A1 /* SImageFetchOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SImageFetchOperation.m; sourceTree = "<group>"; };
 		3C0B786ED3569CF0CEEC292C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		89488DB46E3A4908ED4D3352 /* SImagePicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = SImagePicker.podspec; sourceTree = "<group>"; };
 		FCA46364233F7861C8AF61BD /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 			children = (
 				36BFABFD22BA99E400BDD0E8 /* SImagePickerHelper.h */,
 				36BFABFE22BA99E400BDD0E8 /* SImagePickerHelper.m */,
+				36F7F1D923AB13F9009D96A1 /* SImageFetchOperation.h */,
+				36F7F1DA23AB13F9009D96A1 /* SImageFetchOperation.m */,
 				36DF036B23A72AF5000199F2 /* UICollectionView+SImagePicker.h */,
 				36DF036C23A72AF5000199F2 /* UICollectionView+SImagePicker.m */,
 			);
@@ -202,6 +208,7 @@
 				361BB4D023250C81002E71CA /* SImagePickerConfiguration.h in Headers */,
 				36BFABFF22BA99E400BDD0E8 /* SImagePickerHelper.h in Headers */,
 				369E2D262368547A004CBE4C /* SAssetCell.h in Headers */,
+				36F7F1DB23AB13F9009D96A1 /* SImageFetchOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36F7F1DC23AB13F9009D96A1 /* SImageFetchOperation.m in Sources */,
 				36441EC122BB700200499DA7 /* SImageViewController.m in Sources */,
 				36BFAC0022BA99E400BDD0E8 /* SImagePickerHelper.m in Sources */,
 				36441EC622BB710B00499DA7 /* SImagePicker.m in Sources */,
@@ -479,7 +487,7 @@
 		3601B570200C90960011CCAE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -507,7 +515,7 @@
 		3601B571200C90960011CCAE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";

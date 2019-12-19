@@ -46,6 +46,8 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 
 - (void)requestImageForAsset:(PHAsset *)asset completion:(SImageRequestCompletion)completion;
 
+- (void)cancelFetchWithAsset:(PHAsset *)asset;
+
 @end
 
 

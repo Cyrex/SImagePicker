@@ -153,7 +153,7 @@
 
 - (NSArray<PHAsset *> *)dataList {
     if (!_dataList) {
-        _dataList = [[SImagePickerHelper sharedHelper] fetchAllAsset];
+//        _dataList = [[SImagePickerHelper sharedHelper] fetchAllAsset];
     }
 
     return _dataList;
