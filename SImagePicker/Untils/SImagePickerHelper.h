@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^SAuthorizationCompletion)(PHAuthorizationStatus status);
 typedef void (^SFetchAssetResultCompletion)(PHFetchResult<PHAsset *> *featchResult);
+typedef void (^SFetchCollectionResultCompletion)(PHFetchResult<PHAssetCollection *> *featchResult);
 typedef void (^SImageRequestCompletion)(UIImage *__nullable image);
 typedef void (^SVideoRequestCompletion)(NSURL *__nullable avURL, CGFloat duration);
 typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) API_AVAILABLE(ios(9.1));
@@ -29,28 +30,30 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 
 - (void)requestAuthorization:(_Nullable SAuthorizationCompletion)completion;
 
-- (NSArray<PHAssetCollection *> *)fetchAllCollection;
-
 - (void)fetchAllAsset:(SFetchAssetResultCompletion)completion;
+
+- (void)fetchAllCollection:(SFetchCollectionResultCompletion)completion;
 
 - (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion;
 
 @end
 
 
-#pragma mark -
-#pragma mark - Image
+// MARK: -
+// MARK: - Image
 @interface SImagePickerHelper (Image)
 
 - (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion;
 
 - (void)requestImageForAsset:(PHAsset *)asset completion:(SImageRequestCompletion)completion;
 
+- (void)cancelFetchWithAsset:(PHAsset *)asset;
+
 @end
 
 
-#pragma mark -
-#pragma mark - Video
+// MARK: -
+// MARK: - Video
 @interface SImagePickerHelper (Video)
 
 - (void)requestVideoForAsset:(PHAsset *)asset completion:(SVideoRequestCompletion)completion;
@@ -58,24 +61,11 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 @end
 
 
-#pragma mark -
-#pragma mark - LivePhoto
+// MARK: -
+// MARK: - LivePhoto
 @interface SImagePickerHelper (LivePhoto)
 
 - (void)requestLivePhotoForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(SLivePhotoRequestCompletion)completion API_AVAILABLE(ios(9.1));
-
-@end
-
-
-#pragma mark -
-#pragma mark - Caching
-@interface SImagePickerHelper (Caching)
-
-- (void)startCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize;
-
-- (void)stopCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize;
-
-- (void)stopCachingImagesForAllAssets;
 
 @end
 

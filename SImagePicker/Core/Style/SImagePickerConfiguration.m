@@ -9,7 +9,7 @@
 #import "SImagePickerConfiguration.h"
 
 @implementation SImagePickerConfiguration
-#pragma mark - Class Methods
+// MARK: - Class Methods
 + (SImagePickerConfiguration *)defaultConfiguration {
     SImagePickerConfiguration *configuration = [[SImagePickerConfiguration alloc] init];
 
