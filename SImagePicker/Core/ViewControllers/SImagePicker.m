@@ -18,22 +18,27 @@
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
-@property (nonatomic, strong) NSArray<PHAsset *> *dataList;
+@property (nonatomic, strong) PHFetchResult<PHAsset *> *dataList;
 
 @end
 
 @implementation SImagePicker
-#pragma mark - Override
+// MARK: - Override
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self configViews];
     [self configNavigations];
     [self renderViews];
+    
+    [SImagePickerHelper.sharedHelper fetchAllAsset:^(PHFetchResult<PHAsset *> * _Nonnull featchResult) {
+        self.dataList = featchResult;
+        [self.collectionView reloadData];
+    }];
 }
 
 
-#pragma mark - Private Methods
+// MARK: - Private Methods
 - (void)configViews {
     [self.view addSubview:self.collectionView];
 }
@@ -50,7 +55,7 @@
 }
 
 
-#pragma mark - Class Methods
+// MARK: - Class Methods
 + (void)showImagePickerFromController:(UIViewController<SImagePickerDataSource,SImagePickerDelegate> *)fromController
                           configBlock:(SImagePickerConfiguration * (^)(void))configBlock {
 
@@ -64,7 +69,7 @@
 }
 
 
-#pragma mark - Action Methods
+// MARK: - Action Methods
 - (void)dismissViewController {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.delegate && [self.delegate respondsToSelector:@selector(imagePickerDidCancel:)]) {
@@ -74,7 +79,7 @@
 }
 
 
-#pragma mark - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.dataList.count;
 }
@@ -85,9 +90,10 @@
 
     if (indexPath.row < self.dataList.count) {
         PHAsset *asset = [self.dataList objectAtIndex:indexPath.row];
-        [SImagePickerHelper.sharedHelper requestThumbnailForAsset:asset targetSize:CGSizeMake(200, 200) isHighQuality:YES completion:^(UIImage *image) {
-            cell.image = image;
-        }];
+        [cell fillWithAsset:asset];
+//        [SImagePickerHelper.sharedHelper requestThumbnailForAsset:asset targetSize:CGSizeMake(200, 200) isHighQuality:YES completion:^(UIImage *image) {
+//            cell.image = image;
+//        }];
     }
 //        if (image) {
 //            [cell setImage:image];
@@ -109,20 +115,20 @@
 }
 
 
-#pragma mark - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 }
 
 
-#pragma mark - UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(floor((CGRectGetWidth(collectionView.bounds) - 12) / 3),
                       floor((CGRectGetWidth(collectionView.bounds) - 12) / 3));
 }
 
 
-#pragma mark - Getters
+// MARK: - Getters
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds
@@ -149,14 +155,6 @@
     }
 
     return _flowLayout;
-}
-
-- (NSArray<PHAsset *> *)dataList {
-    if (!_dataList) {
-//        _dataList = [[SImagePickerHelper sharedHelper] fetchAllAsset];
-    }
-
-    return _dataList;
 }
 
 @end

@@ -18,7 +18,6 @@
 @interface SImageFetchOperation ()
 
 @property (nonatomic, strong) PHAsset *asset;
-@property (nonatomic, strong) PHCachingImageManager *cacheManager;
 
 @property (nonatomic, assign) PHImageRequestID requestID;
 @property (nonatomic, assign) CGSize targetSize;
@@ -33,10 +32,9 @@
 @synthesize finished = _finished;
 
 // MARK: - Life Cycle
-- (instancetype)initWithAsset:(PHAsset *)asset cacheManager:(PHCachingImageManager *)cacheManager {
+- (instancetype)initWithAsset:(PHAsset *)asset {
     if (self = [super init]) {
         self.asset = asset;
-        self.cacheManager = cacheManager;
 
         _executing = NO;
         _finished = NO;
@@ -74,25 +72,32 @@
         } else {
             options.resizeMode = PHImageRequestOptionsResizeModeExact;
         }
-        [self.cacheManager requestImageForAsset:self.asset targetSize:self.targetSize contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary * _Nullable info) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.completion) {
-                    self.completion(result);
-                }
-                [self done];
-            });
-        }];
+        [PHImageManager.defaultManager requestImageForAsset:self.asset
+                                                 targetSize:self.targetSize
+                                                contentMode:PHImageContentModeAspectFill
+                                                    options:options
+                                              resultHandler:^(UIImage *result, NSDictionary * _Nullable info) {
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        if (self.completion) {
+                                                            self.completion(result);
+                                                        }
+                                                        [self done];
+                                                    });
+                                            }];
         self.executing = YES;
     }
 }
 
 - (void)cancel {
     @synchronized (self) {
-        if (self.isFinished) return;
+        if (self.isFinished) {
+            return;
+        }
+
         [super cancel];
         
         if (self.asset && self.requestID != PHInvalidImageRequestID) {
-            [self.cacheManager cancelImageRequest:self.requestID];
+            [PHImageManager.defaultManager cancelImageRequest:self.requestID];
             if (self.isExecuting) self.executing = NO;
             if (!self.isFinished) self.finished = YES;
         }
@@ -108,7 +113,6 @@
 
 - (void)reset {
     self.asset = nil;
-    self.cacheManager = nil;
 }
 
 - (void)setFinished:(BOOL)finished {

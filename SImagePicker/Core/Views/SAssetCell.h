@@ -13,6 +13,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class PHAsset;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SAssetCell : UICollectionViewCell
@@ -20,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImage *image;
 
 + (NSString *)reuseIdentifier;
+
+- (void)fillWithAsset:(PHAsset *)asset;
 
 @end
 

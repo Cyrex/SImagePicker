@@ -13,7 +13,7 @@
 @end
 
 @implementation SImageViewController
-#pragma mark - Override
+// MARK: - Override
 
 
 @end

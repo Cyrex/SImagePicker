@@ -9,19 +9,15 @@
 #import "SImagePickerHelper.h"
 #import "SImageFetchOperation.h"
 
-#import <SpriteKit/SpriteKit.h>
-
 @interface SImagePickerHelper ()
 
 @property (nonatomic, strong) NSOperationQueue *fetchQueue;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, SImageFetchOperation*> *fetchOperationDics;
 
-@property (nonatomic, strong) PHCachingImageManager *cacheManager;
-
 @end
 
 @implementation SImagePickerHelper
-#pragma mark - Singleton
+// MARK: - Singleton
 + (SImagePickerHelper *)sharedHelper {
     static SImagePickerHelper *__sharedHelper;
     static dispatch_once_t onceToken;
@@ -38,14 +34,14 @@
     if (self = [super init]) {
         self.fetchQueue = [NSOperationQueue new];
         self.fetchQueue.maxConcurrentOperationCount = 8;
-        self.fetchQueue.name = @"com.szwathub.imagePicker";
+        self.fetchQueue.name = @"com.szwathub.imagePickerFetchQueue";
         self.fetchOperationDics = [NSMutableDictionary dictionary];
     }
-    
+
     return self;
 }
 
-#pragma mark - Class Methods
+// MARK: - Public Methods
 - (void)requestAuthorization:(SAuthorizationCompletion)completion {
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
 
@@ -64,35 +60,6 @@
     }
 }
 
-- (NSArray <PHAssetCollection *> *)fetchAllCollection {
-    NSMutableArray<PHAssetCollection *> *collectionList = [NSMutableArray array];
-    PHFetchResult *smartAlbums = nil;
-
-    smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
-                                                           subtype:PHAssetCollectionSubtypeAlbumRegular
-                                                           options:nil];
-    if (smartAlbums.count > 0) {
-        [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-            PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
-            if (assets.count > 0) {
-                [collectionList addObject:collection];
-            }
-        }];
-    }
-
-    PHFetchResult *topCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-    if (topCollections.count > 0) {
-        [topCollections enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-            PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection  options:nil];
-            if (assets.count > 0) {
-                [collectionList addObject:collection];
-            }
-        }];
-    }
-
-    return collectionList;
-}
-
 - (void)fetchAllAsset:(SFetchAssetResultCompletion)completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
@@ -106,6 +73,41 @@
             }
         });
     });
+}
+
+- (void)fetchAllCollection:(SFetchCollectionResultCompletion)completion {
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        NSMutableArray<PHAssetCollection *> *collectionList = [NSMutableArray array];
+//        PHFetchResult *smartAlbums = nil;
+//
+//        smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
+//                                                               subtype:PHAssetCollectionSubtypeAlbumRegular
+//                                                               options:nil];
+//        if (smartAlbums.count > 0) {
+//            [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
+//                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
+//                if (assets.count > 0) {
+//                    [collectionList addObject:collection];
+//                }
+//            }];
+//        }
+//
+//        PHFetchResult *topCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+//        if (topCollections.count > 0) {
+//            [topCollections enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
+//                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection  options:nil];
+//                if (assets.count > 0) {
+//                    [collectionList addObject:collection];
+//                }
+//            }];
+//        }
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if(completion) {
+//                completion(nil);
+//            }
+//        });
+//    });
 }
 
 - (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion {
@@ -123,48 +125,15 @@
     });
 }
 
-
-#pragma mark - Getters
-- (PHCachingImageManager *)cacheManager {
-    if (!_cacheManager) {
-        _cacheManager = [[PHCachingImageManager alloc] init];
-        _cacheManager.allowsCachingHighQualityImages = NO;
-    }
-
-    return _cacheManager;
-}
-
 @end
 
 
-#pragma mark -
-#pragma mark - Image
+// MARK: -
+// MARK: - Image
 @implementation SImagePickerHelper (Image)
-#pragma mark - Class Methods
+// MARK: - Public Methods
 - (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
-//        if (isHighQuality) {
-//            requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-//        } else {
-//            requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
-//        }
-//        requestOptions.networkAccessAllowed = YES;
-//        requestOptions.synchronous = YES;
-//
-//        [[PHImageManager defaultManager] requestImageForAsset:asset
-//                                                   targetSize:targetSize
-//                                                  contentMode:PHImageContentModeAspectFill
-//                                                      options:requestOptions
-//                                                resultHandler:^(UIImage *result, NSDictionary *info) {
-//                                                    dispatch_async(dispatch_get_main_queue(), ^{
-//                                                        if (completion) {
-//                                                            completion(result);
-//                                                        }
-//                                                    });
-//                                                }];
-//    });
-    SImageFetchOperation *operation = [[SImageFetchOperation alloc] initWithAsset:asset cacheManager:self.cacheManager];
+    SImageFetchOperation *operation = [[SImageFetchOperation alloc] initWithAsset:asset];
     __weak typeof(self) weakSelf = self;
     [operation requesImageWithSize:targetSize needHighQuality:isHighQuality completion:^(UIImage * _Nullable image) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -205,79 +174,52 @@
 
 
 
-#pragma mark -
-#pragma mark - Video
+// MARK: -
+// MARK: - Video
 @implementation SImagePickerHelper (Video)
-#pragma mark - Class Methods
+// MARK: - Public Methods
 - (void)requestVideoForAsset:(PHAsset *)asset completion:(SVideoRequestCompletion)completion {
     PHVideoRequestOptions *requestOptions = [[PHVideoRequestOptions alloc] init];
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.version = PHVideoRequestOptionsVersionOriginal;
 
-    [self.cacheManager requestAVAssetForVideo:asset
-                                      options:requestOptions
-                                resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                    if (completion) {
-                                        if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
-                                            AVURLAsset *avAsset = (AVURLAsset *)asset;
-                                            CMTime time = avAsset.duration;
-                                            CGFloat duration = time.value / time.timescale;
-                                            completion(avAsset.URL, duration);
-                                        } else {
-                                            completion(nil, 0.f);
-                                        }
-                                    }
-                                }];
+    [PHImageManager.defaultManager requestAVAssetForVideo:asset
+                                                  options:requestOptions
+                                            resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+                                                if (completion) {
+                                                    if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
+                                                        AVURLAsset *avAsset = (AVURLAsset *)asset;
+                                                        CMTime time = avAsset.duration;
+                                                        CGFloat duration = time.value / time.timescale;
+                                                        completion(avAsset.URL, duration);
+                                                    } else {
+                                                        completion(nil, 0.f);
+                                                    }
+                                                }
+                                        }];
 }
 
 @end
 
 
-#pragma mark -
-#pragma mark - LivePhoto
+// MARK: -
+// MARK: - LivePhoto
 @implementation SImagePickerHelper (LivePhoto)
-#pragma mark - Class Methods
+// MARK: - Public Methods
 - (void)requestLivePhotoForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(SLivePhotoRequestCompletion)completion {
     PHLivePhotoRequestOptions *requestOptions = [[PHLivePhotoRequestOptions alloc] init];
     requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     requestOptions.networkAccessAllowed = YES;
 
-    [self.cacheManager requestLivePhotoForAsset:asset
-                                     targetSize:targetSize
-                                    contentMode:PHImageContentModeAspectFit
-                                        options:requestOptions
-                                  resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
-                                        if (completion) {
-                                            completion(livePhoto);
-                                        }
-                                    }];
-}
-
-@end
-
-#pragma mark -
-#pragma mark - Caching
-@implementation SImagePickerHelper (Caching)
-- (void)startCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
-    [self.cacheManager startCachingImagesForAssets:assets
-                                        targetSize:targetSize
-                                       contentMode:PHImageContentModeAspectFill
-                                           options:nil];
-}
-
-- (void)stopCachingImagesForAssets:(NSArray<PHAsset *> *)assets targetSize:(CGSize)targetSize {
-    [self.cacheManager startCachingImagesForAssets:assets
-                                        targetSize:targetSize
-                                       contentMode:PHImageContentModeAspectFill
-                                           options:nil];
-}
-
-- (void)stopCachingImagesForAllAssets {
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-
-    if (PHAuthorizationStatusNotDetermined == status) {
-        [self.cacheManager stopCachingImagesForAllAssets];
-    }
+    [PHImageManager.defaultManager requestLivePhotoForAsset:asset
+                                                 targetSize:targetSize
+                                                contentMode:PHImageContentModeAspectFit
+                                                    options:requestOptions
+                                              resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
+                                                if (completion) {
+                                                    completion(livePhoto);
+                                                }
+                                            }];
 }
 
 @end

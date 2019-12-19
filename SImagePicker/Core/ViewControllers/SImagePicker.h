@@ -37,8 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol SImagePickerDataSource;
 @protocol SImagePickerDelegate;
 
-#pragma mark -
-#pragma mark - SImagePicker
+// MARK: -
+// MARK: - SImagePicker
 @interface SImagePicker : UIViewController
 
 @property (nonatomic, weak) id<SImagePickerDataSource> dataSource;
@@ -49,8 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-#pragma mark -
-#pragma mark - SImagePickerDataSource
+// MARK: -
+// MARK: - SImagePickerDataSource
 @protocol SImagePickerDataSource <NSObject>
 @required
 //- (SImagePickerConfiguration *)configurationForImagePicker:(SImagePicker *)imagePicker;
@@ -58,8 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-#pragma mark -
-#pragma mark - SImagePickerDelegate
+// MARK: -
+// MARK: - SImagePickerDelegate
 @protocol SImagePickerDelegate <NSObject>
 @optional
 - (void)imagePicker:(SImagePicker *)imagePicker didPickingAssets:(NSArray <PHAsset *> *)assets;

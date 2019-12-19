@@ -16,7 +16,7 @@
 @end
 
 @implementation SViewController
-#pragma mark - Life Cycle
+// MARK: - Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -29,7 +29,7 @@
 }
 
 
-#pragma mark - Action Methods
+// MARK: - Action Methods
 - (void)showImagePicker {
     [SImagePicker showImagePickerFromController:self configBlock:^SImagePickerConfiguration * {
         SImagePickerConfiguration *configuration = SImagePickerConfiguration.defaultConfiguration;
@@ -41,11 +41,11 @@
 }
 
 
-#pragma mark - SImagePickerDataSource
+// MARK: - SImagePickerDataSource
 
 
 
-#pragma mark - SImagePickerDelegate
+// MARK: - SImagePickerDelegate
 - (void)imagePicker:(SImagePicker *)imagePicker didPickingAssets:(NSArray<PHAsset *> *)assets {
 
 }
@@ -55,7 +55,7 @@
 }
 
 
-#pragma mark - Getters
+// MARK: - Getters
 - (UIButton *)showButton {
     if (!_showButton) {
         _showButton = [[UIButton alloc] init];

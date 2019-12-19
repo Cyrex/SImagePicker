@@ -17,13 +17,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class PHAsset;
-@class PHCachingImageManager;
 
 typedef void (^SImageOperationFetchCompletion)(UIImage *__nullable image);
 
 @interface SImageFetchOperation : NSOperation
 
-- (instancetype)initWithAsset:(PHAsset *)asset cacheManager:(PHCachingImageManager *)cacheManager;
+- (instancetype)initWithAsset:(PHAsset *)asset;
 
 - (void)requesImageWithSize:(CGSize)size
             needHighQuality:(BOOL)isHighQuality

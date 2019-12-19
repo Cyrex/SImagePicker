@@ -14,8 +14,8 @@
 #ifndef SImagePickerMacros__H_
 #define SImagePickerMacros__H_
 
-#pragma mark -
-#pragma mark - Color
+// MARK: -
+// MARK: - Color
 #ifndef SColorFromHexWithAlpha
     #define SColorFromHexWithAlpha(hexValue,a)                                          \
                 [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16)) / 255.0    \
