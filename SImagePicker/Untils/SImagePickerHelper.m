@@ -179,24 +179,35 @@
 @implementation SImagePickerHelper (Video)
 // MARK: - Public Methods
 - (void)requestVideoForAsset:(PHAsset *)asset completion:(SVideoRequestCompletion)completion {
-    PHVideoRequestOptions *requestOptions = [[PHVideoRequestOptions alloc] init];
-    requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
-    requestOptions.version = PHVideoRequestOptionsVersionOriginal;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PHVideoRequestOptions *requestOptions = [[PHVideoRequestOptions alloc] init];
+        requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+        requestOptions.version = PHVideoRequestOptionsVersionOriginal;
 
-    [PHImageManager.defaultManager requestAVAssetForVideo:asset
-                                                  options:requestOptions
-                                            resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
-                                                if (completion) {
-                                                    if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
-                                                        AVURLAsset *avAsset = (AVURLAsset *)asset;
-                                                        CMTime time = avAsset.duration;
-                                                        CGFloat duration = time.value / time.timescale;
-                                                        completion(avAsset.URL, duration);
-                                                    } else {
-                                                        completion(nil, 0.f);
+        [PHImageManager.defaultManager requestAVAssetForVideo:asset
+                                                      options:requestOptions
+                                                resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+                                                    if (completion) {
+                                                        if (asset && [asset isKindOfClass:[AVURLAsset class]]) {
+                                                            AVURLAsset *avAsset = (AVURLAsset *)asset;
+                                                            CMTime time = avAsset.duration;
+                                                            CGFloat duration = time.value / time.timescale;
+                                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                                if(completion) {
+                                                                    completion(avAsset.URL, duration);
+                                                                }
+                                                            });
+                                                            
+                                                        } else {
+                                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                                if(completion) {
+                                                                    completion(nil, 0.f);
+                                                                }
+                                                            });
+                                                        }
                                                     }
-                                                }
-                                        }];
+                                            }];
+    });
 }
 
 @end
@@ -207,19 +218,25 @@
 @implementation SImagePickerHelper (LivePhoto)
 // MARK: - Public Methods
 - (void)requestLivePhotoForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(SLivePhotoRequestCompletion)completion {
-    PHLivePhotoRequestOptions *requestOptions = [[PHLivePhotoRequestOptions alloc] init];
-    requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
-    requestOptions.networkAccessAllowed = YES;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PHLivePhotoRequestOptions *requestOptions = [[PHLivePhotoRequestOptions alloc] init];
+        requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+        requestOptions.networkAccessAllowed = YES;
 
-    [PHImageManager.defaultManager requestLivePhotoForAsset:asset
-                                                 targetSize:targetSize
-                                                contentMode:PHImageContentModeAspectFit
-                                                    options:requestOptions
-                                              resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
-                                                if (completion) {
-                                                    completion(livePhoto);
-                                                }
-                                            }];
+        [PHImageManager.defaultManager requestLivePhotoForAsset:asset
+                                                     targetSize:targetSize
+                                                    contentMode:PHImageContentModeAspectFit
+                                                        options:requestOptions
+                                                  resultHandler:^(PHLivePhoto *livePhoto, NSDictionary *info) {
+                                                    if (completion) {
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            if(completion) {
+                                                                completion(livePhoto);
+                                                            }
+                                                        });
+                                                    }
+                                                }];
+    });
 }
 
 @end
