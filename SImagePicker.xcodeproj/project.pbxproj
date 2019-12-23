@@ -159,7 +159,7 @@
 			name = SImagePickerMetadata;
 			sourceTree = "<group>";
 		};
-		36BFABFC22BA99BA00BDD0E8 /* Untils */ = {
+		36BFABFC22BA99BA00BDD0E8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				36BFABFD22BA99E400BDD0E8 /* SImagePickerHelper.h */,
@@ -167,7 +167,7 @@
 				36F7F1D923AB13F9009D96A1 /* SImageFetchOperation.h */,
 				36F7F1DA23AB13F9009D96A1 /* SImageFetchOperation.m */,
 			);
-			path = Untils;
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		36F155CD20DD0FAB002436F4 /* SImagePicker */ = {
@@ -175,7 +175,7 @@
 			children = (
 				36F155CF20DD0FAB002436F4 /* Info.plist */,
 				36441EC222BB70ED00499DA7 /* Core */,
-				36BFABFC22BA99BA00BDD0E8 /* Untils */,
+				36BFABFC22BA99BA00BDD0E8 /* Utils */,
 			);
 			path = SImagePicker;
 			sourceTree = "<group>";

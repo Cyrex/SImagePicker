@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SImagePicker'
-  s.version          = '1.0.2'
+  s.version          = '1.1.0'
   s.summary          = 'A simple library to pick pictures.'
 
 # This description is used to generate tags and improve search results.
@@ -30,11 +30,11 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Core'
 
   s.subspec 'Core' do |ss|
-    ss.dependency 'SImagePicker/Untils'
+    ss.dependency 'SImagePicker/Utils'
   end
 
-  s.subspec 'Untils' do |ss|
-    ss.public_header_files = 'SImagePicker/Untils/*.h'
-    ss.ios.source_files  = 'SImagePicker/Untils/*.{h,m}'
+  s.subspec 'Utils' do |ss|
+    ss.public_header_files = 'SImagePicker/Utils/*.h'
+    ss.ios.source_files  = 'SImagePicker/Utils/*.{h,m}'
   end
 end
