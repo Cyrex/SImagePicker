@@ -17,7 +17,7 @@
 @end
 
 @implementation SImagePickerHelper
-// MARK: - Singleton
+// MARK: Singleton
 + (SImagePickerHelper *)sharedHelper {
     static SImagePickerHelper *__sharedHelper;
     static dispatch_once_t onceToken;
@@ -29,7 +29,7 @@
 }
 
 
-// MARK: - Life Cycle
+// MARK: Life Cycle
 - (instancetype)init {
     if (self = [super init]) {
         self.fetchQueue = [NSOperationQueue new];
@@ -60,6 +60,42 @@
     }
 }
 
+- (NSArray<PHAssetCollection *> *)fetchAllCollection {
+    NSMutableArray <PHAssetCollection *> *collectionArray = [NSMutableArray array];
+    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
+                                                                          subtype:PHAssetCollectionSubtypeAlbumRegular
+                                                                          options:nil];
+    if (smartAlbums.count > 0) {
+        [smartAlbums enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if ([obj isKindOfClass:[PHAssetCollection class]]) {
+                PHAssetCollection *collection = obj;
+                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
+                if (assets.count > 0) {
+                    [collectionArray addObject:collection];
+                }
+            }
+        }];
+    }
+    
+    PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+    if (topLevelUserCollections.count > 0) {
+        
+        [topLevelUserCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if ([obj isKindOfClass:[PHAssetCollection class]]) {
+                PHAssetCollection *collection = obj;
+                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
+                if (assets.count > 0) {
+                    [collectionArray addObject:collection];
+                }
+            }
+        }];
+    }
+
+    return collectionArray;
+}
+
 - (void)fetchAllAsset:(SFetchAssetResultCompletion)completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
@@ -75,46 +111,15 @@
     });
 }
 
-- (void)fetchAllCollection:(SFetchCollectionResultCompletion)completion {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        NSMutableArray<PHAssetCollection *> *collectionList = [NSMutableArray array];
-//        PHFetchResult *smartAlbums = nil;
-//
-//        smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
-//                                                               subtype:PHAssetCollectionSubtypeAlbumRegular
-//                                                               options:nil];
-//        if (smartAlbums.count > 0) {
-//            [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-//                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
-//                if (assets.count > 0) {
-//                    [collectionList addObject:collection];
-//                }
-//            }];
-//        }
-//
-//        PHFetchResult *topCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-//        if (topCollections.count > 0) {
-//            [topCollections enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-//                PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection  options:nil];
-//                if (assets.count > 0) {
-//                    [collectionList addObject:collection];
-//                }
-//            }];
-//        }
-//
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            if(completion) {
-//                completion(nil);
-//            }
-//        });
-//    });
-}
+- (void)fetchAssetForCollection:(PHAssetCollection *)collection
+                     fetchLimit:(NSUInteger)fetchLimit
+                     completion:(SFetchAssetResultCompletion)completion {
 
-- (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PHFetchOptions *options = [[PHFetchOptions alloc] init];
         options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate"
                                                                   ascending:NO]];
+        options.fetchLimit = fetchLimit;
         PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:options];
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -132,13 +137,17 @@
 // MARK: - Image
 @implementation SImagePickerHelper (Image)
 // MARK: - Public Methods
-- (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion {
+- (void)requestThumbnailForAsset:(PHAsset *)asset
+                      targetSize:(CGSize)targetSize
+                   isHighQuality:(BOOL)isHighQuality
+                      completion:(SImageRequestCompletion)completion {
+
     SImageFetchOperation *operation = [[SImageFetchOperation alloc] initWithAsset:asset];
     __weak typeof(self) weakSelf = self;
-    [operation requesImageWithSize:targetSize needHighQuality:isHighQuality completion:^(UIImage * _Nullable image) {
+    [operation requesImageWithSize:targetSize needHighQuality:isHighQuality completion:^(UIImage *image) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf.fetchOperationDics removeObjectForKey:asset.localIdentifier];
-        completion(image);
+        completion(image, asset.localIdentifier);
     }];
 
     [self.fetchQueue addOperation:operation];

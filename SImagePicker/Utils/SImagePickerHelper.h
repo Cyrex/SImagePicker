@@ -19,8 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^SAuthorizationCompletion)(PHAuthorizationStatus status);
 typedef void (^SFetchAssetResultCompletion)(PHFetchResult<PHAsset *> *featchResult);
-typedef void (^SFetchCollectionResultCompletion)(PHFetchResult<PHAssetCollection *> *featchResult);
-typedef void (^SImageRequestCompletion)(UIImage *__nullable image);
+typedef void (^SImageRequestCompletion)(UIImage *__nullable image, NSString *__nullable identifier);
 typedef void (^SVideoRequestCompletion)(NSURL *__nullable avURL, CGFloat duration);
 typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) API_AVAILABLE(ios(9.1));
 
@@ -30,11 +29,13 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 
 - (void)requestAuthorization:(_Nullable SAuthorizationCompletion)completion;
 
+- (NSArray <PHAssetCollection *> *)fetchAllCollection;
+
 - (void)fetchAllAsset:(SFetchAssetResultCompletion)completion;
 
-- (void)fetchAllCollection:(SFetchCollectionResultCompletion)completion;
-
-- (void)fetchAssetForCollection:(PHAssetCollection *)collection completion:(SFetchAssetResultCompletion)completion;
+- (void)fetchAssetForCollection:(PHAssetCollection *)collection
+                     fetchLimit:(NSUInteger)fetchLimit
+                     completion:(SFetchAssetResultCompletion)completion;
 
 @end
 
@@ -43,7 +44,10 @@ typedef void (^SLivePhotoRequestCompletion)(PHLivePhoto *__nullable livePhoto) A
 // MARK: - Image
 @interface SImagePickerHelper (Image)
 
-- (void)requestThumbnailForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize isHighQuality:(BOOL)isHighQuality completion:(SImageRequestCompletion)completion;
+- (void)requestThumbnailForAsset:(PHAsset *)asset
+                      targetSize:(CGSize)targetSize
+                   isHighQuality:(BOOL)isHighQuality
+                      completion:(SImageRequestCompletion)completion;
 
 - (void)requestImageForAsset:(PHAsset *)asset completion:(SImageRequestCompletion)completion;
 

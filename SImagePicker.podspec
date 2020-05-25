@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SImagePicker'
-  s.version          = '1.1.0'
+  s.version          = '1.1.1'
   s.summary          = 'A simple library to pick pictures.'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Cyrex' => 'szwathub@gmail.com' }
   s.source           = { :git => 'https://github.com/Cyrex/SImagePicker.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.default_subspec = 'Core'
 
   s.subspec 'Core' do |ss|
