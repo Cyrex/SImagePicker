@@ -40,12 +40,12 @@
     //    if (self.asset.cacheImage) {
     //        self.imageView.image = self.asset.cacheImage;
     //        return;
-    //    }
-    [SImagePickerHelper.sharedHelper requestThumbnailForAsset:self.asset targetSize:CGSizeMake(200, 200) isHighQuality:YES completion:^(UIImage * _Nullable image) {
-//        if ([self.representedAssetIdentifier isEqualToString:asset.localIdentifier]) {
-            self.imageView.image = image;
-//        }
-    }];
+//    //    }
+//    [SImagePickerHelper.sharedHelper requestThumbnailForAsset:self.asset targetSize:CGSizeMake(200, 200) isHighQuality:YES completion:^(UIImage * _Nullable image) {
+////        if ([self.representedAssetIdentifier isEqualToString:asset.localIdentifier]) {
+//            self.imageView.image = image;
+////        }
+//    }];
 }
 
 

@@ -63,11 +63,10 @@
 - (NSArray<PHAssetCollection *> *)fetchAllCollection {
     NSMutableArray <PHAssetCollection *> *collectionArray = [NSMutableArray array];
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum
-                                                                          subtype:PHAssetCollectionSubtypeAlbumRegular
+                                                                          subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary
                                                                           options:nil];
     if (smartAlbums.count > 0) {
-        [smartAlbums enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
+        [smartAlbums enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj isKindOfClass:[PHAssetCollection class]]) {
                 PHAssetCollection *collection = obj;
                 PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
@@ -78,11 +77,11 @@
         }];
     }
     
-    PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-    if (topLevelUserCollections.count > 0) {
-        
-        [topLevelUserCollections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
+    PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum
+                                                                          subtype:PHAssetCollectionSubtypeAlbumRegular
+                                                                          options:nil];
+    if (albums.count > 0) {
+        [albums enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj isKindOfClass:[PHAssetCollection class]]) {
                 PHAssetCollection *collection = obj;
                 PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
